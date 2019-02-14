@@ -5,7 +5,6 @@ import java.time.LocalTime;
 
 import javax.persistence.Embeddable;
 
-import Application.entities.UserItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,14 +20,15 @@ import lombok.Setter;
 @Embeddable
 public class LogsDataValue {
 
-	//TODO: Bidirectional private UserItem userItemOwner; 
-	
+	// TODO: Bidirectional private UserItem userItemOwner;
+
 	private LocalDate date;
 	private LocalTime time;
 	private UserActions action;
 	private String description;
 
 	public enum UserActions {
-		STATUS_CHANGE, EMAIL_CHANGE, ADDRESS_CHANGE,
+		EVENTSUBSCRIBE, EVENTEDIT, EVENTCANCEL, EVENTREAD, COMMENTLEFT, REGISTERED, LOGON, WATCHEDPROFILE,
+		STATUS_CHANGE, EMAIL_CHANGE, ADDRESS_CHANGE;
 	}
 }
