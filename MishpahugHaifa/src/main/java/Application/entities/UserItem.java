@@ -1,5 +1,6 @@
 package Application.entities;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import Application.entities.values.LogsDataValue;
 import Application.entities.values.PictureValue;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -55,8 +57,9 @@ public class UserItem {
 	private String lastName;
 	@ElementCollection
 	@CollectionTable
-	@GenericGenerator(name="increment-gen",strategy="increment")
-	@CollectionId(columns= {@Column(name="LOG_RECORD_ID")}, generator="increment-gen", type=@Type(type="long"))
+	@GenericGenerator(name = "increment-gen", strategy = "increment")
+	@CollectionId(columns = {
+			@Column(name = "LOG_RECORD_ID") }, generator = "increment-gen", type = @Type(type = "long"))
 	private List<LogsDataValue> logs;
 	private String phoneNumber;
 	private String eMail;
@@ -78,6 +81,7 @@ public class UserItem {
 	@OneToMany(mappedBy = "userItemOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // User owner of events
 	@Column(unique = true)
 	@JsonManagedReference
+	@Getter(AccessLevel.NONE)
 	private Set<EventItem> eventItemsOwner = new HashSet<>();
 
 	@ManyToMany(mappedBy = "userItemsGuestsOfEvents") // User a guest in events
@@ -95,4 +99,21 @@ public class UserItem {
 	public enum UserRole {
 		ADMIN, AUTHORISED, SUSPENDED,
 	}
+
+	public boolean addEvent(EventItem event) {
+		event.setUserItemOwner(this);
+		return eventItemsOwner.add(event); // TODO: thread safety argument;
+	}
+
+	public boolean removeEvent(EventItem event) {
+		System.out.println("Checking contains " + eventItemsOwner.contains(event));
+		boolean res = eventItemsOwner.remove(event);
+		event.setUserItemOwner(null);
+		return res; 
+	}
+
+	public Set<EventItem> getEventItemsOwner() {
+		return Collections.unmodifiableSet(eventItemsOwner);
+	}
+
 }

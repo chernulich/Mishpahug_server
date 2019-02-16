@@ -35,7 +35,6 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
 @ToString(exclude = { "userItemsGuestsOfEvents", "feedBackItems" })
 public class EventItem {
 
@@ -55,7 +54,7 @@ public class EventItem {
 	private EventStatus Status;
 
 	@ManyToOne 
-	@JoinColumn(nullable = false) //there must be an owner for every item; 
+	@JoinColumn(nullable = true) // temporary true due to User remove method requiring to remove the owner from Event;
 	@JsonBackReference
 	private UserItem userItemOwner;
 
@@ -73,6 +72,32 @@ public class EventItem {
 
 	public enum EventStatus {
 		CREATED, PENDING, COMPLETE, CANCELED
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		System.out.println("EQUALS CALLED");
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EventItem other = (EventItem) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 }

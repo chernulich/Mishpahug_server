@@ -51,10 +51,9 @@ public class UserEventOwnerTest {
 		BEN.setFirstName("Ben");
 	}
 
-
 	@Before
 	public void buildManualItem() {
-		TESTING.setUserItemOwner(ALYSSA);
+		ALYSSA.addEvent(TESTING);
 	}
 
 	/**
@@ -64,8 +63,8 @@ public class UserEventOwnerTest {
 	@Test
 	public void onUserSaveReadEvent() {
 
-		
 		userRepo.save(ALYSSA);
+		eventRepo.save(TESTING);
 		assertTrue(em.find(UserItem.class, ALYSSA.getId()) != null);
 
 		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
@@ -87,6 +86,7 @@ public class UserEventOwnerTest {
 	public void onUserAndEventSaveDeleteUser() {
 
 		userRepo.save(ALYSSA);
+		eventRepo.save(TESTING);
 		assertTrue(eventRepo.existsById(TESTING.getId()));
 
 		userRepo.delete(ALYSSA);
@@ -103,14 +103,16 @@ public class UserEventOwnerTest {
 
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
-		
-		EventItem savedE = userRepo.findById(ALYSSA.getId()).get().getEventItemsOwner().iterator().next();
-		savedE.setUserItemOwner(BEN);
-		ALYSSA.getEventItemsOwner().remove(savedE);
-		BEN.getEventItemsOwner().add(savedE);
 
+		EventItem savedE = userRepo.findById(ALYSSA.getId()).get().getEventItemsOwner().iterator().next();
+		assertTrue(TESTING.equals(savedE));
+
+		BEN.addEvent(savedE);
+
+		userRepo.save(ALYSSA);
 		userRepo.save(BEN);
-		
+		eventRepo.save(TESTING);
+
 		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
 		UserItem savedB = userRepo.findById(BEN.getId()).get();
 		assertFalse(savedA.getEventItemsOwner().contains(TESTING));
@@ -129,11 +131,13 @@ public class UserEventOwnerTest {
 
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
-		
-		EventItem savedE = userRepo.findById(ALYSSA.getId()).get().getEventItemsOwner().iterator().next();
-		savedE.setUserItemOwner(BEN);
-		eventRepo.save(savedE);
+
+		ALYSSA.removeEvent(TESTING);
+		BEN.addEvent(TESTING);
+
+		userRepo.save(ALYSSA);
 		userRepo.save(BEN);
+		eventRepo.save(TESTING);
 
 		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
 		UserItem savedB = userRepo.findById(BEN.getId()).get();
@@ -142,20 +146,16 @@ public class UserEventOwnerTest {
 		assertTrue(savedB.getEventItemsOwner().size() == 1);
 
 	}
-	
+
 	@Test
 	public void saveEventReadItInUserList() {
 
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
-		
-		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
 
-		System.out.println(savedA);
-		System.out.println(savedA.getEventItemsOwner());
+		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
 		assertTrue(savedA.getEventItemsOwner().size() == 1);
 
 	}
-
 
 }
