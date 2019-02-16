@@ -21,6 +21,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CollectionId;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -51,6 +55,8 @@ public class UserItem {
 	private String lastName;
 	@ElementCollection
 	@CollectionTable
+	@GenericGenerator(name="increment-gen",strategy="increment")
+	@CollectionId(columns= {@Column(name="LOG_RECORD_ID")}, generator="increment-gen", type=@Type(type="long"))
 	private List<LogsDataValue> logs;
 	private String phoneNumber;
 	private String eMail;

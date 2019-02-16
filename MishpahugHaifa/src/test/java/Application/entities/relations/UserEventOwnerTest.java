@@ -49,16 +49,12 @@ public class UserEventOwnerTest {
 	public void buildEntities() {
 		ALYSSA.setFirstName("Alyssa");
 		BEN.setFirstName("Ben");
-		TESTING.setUserItemOwner(ALYSSA);
-
 	}
 
-	/**
-	 * We need to update a set on the owner's side with bidirectional relations;
-	 */
+
 	@Before
 	public void buildManualItem() {
-		ALYSSA.getEventItemsOwner().add(TESTING);
+		TESTING.setUserItemOwner(ALYSSA);
 	}
 
 	/**
@@ -68,6 +64,7 @@ public class UserEventOwnerTest {
 	@Test
 	public void onUserSaveReadEvent() {
 
+		
 		userRepo.save(ALYSSA);
 		assertTrue(em.find(UserItem.class, ALYSSA.getId()) != null);
 
@@ -105,14 +102,15 @@ public class UserEventOwnerTest {
 	public void onUserSaveChangeEvent() {
 
 		userRepo.save(ALYSSA);
-
+		eventRepo.save(TESTING);
+		
 		EventItem savedE = userRepo.findById(ALYSSA.getId()).get().getEventItemsOwner().iterator().next();
 		savedE.setUserItemOwner(BEN);
 		ALYSSA.getEventItemsOwner().remove(savedE);
 		BEN.getEventItemsOwner().add(savedE);
 
 		userRepo.save(BEN);
-
+		
 		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
 		UserItem savedB = userRepo.findById(BEN.getId()).get();
 		assertFalse(savedA.getEventItemsOwner().contains(TESTING));
@@ -130,14 +128,34 @@ public class UserEventOwnerTest {
 	public void twoOwnersSameEvent() {
 
 		userRepo.save(ALYSSA);
-		BEN.getEventItemsOwner().add(TESTING);
+		eventRepo.save(TESTING);
+		
+		EventItem savedE = userRepo.findById(ALYSSA.getId()).get().getEventItemsOwner().iterator().next();
+		savedE.setUserItemOwner(BEN);
+		eventRepo.save(savedE);
 		userRepo.save(BEN);
 
 		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
 		UserItem savedB = userRepo.findById(BEN.getId()).get();
 
-		assertTrue(savedA.getEventItemsOwner().size() == savedB.getEventItemsOwner().size());
+		assertTrue(savedA.getEventItemsOwner().size() == 0);
+		assertTrue(savedB.getEventItemsOwner().size() == 1);
 
 	}
+	
+	@Test
+	public void saveEventReadItInUserList() {
+
+		userRepo.save(ALYSSA);
+		eventRepo.save(TESTING);
+		
+		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
+
+		System.out.println(savedA);
+		System.out.println(savedA.getEventItemsOwner());
+		assertTrue(savedA.getEventItemsOwner().size() == 1);
+
+	}
+
 
 }
