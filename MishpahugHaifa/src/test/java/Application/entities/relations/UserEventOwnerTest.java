@@ -51,11 +51,6 @@ public class UserEventOwnerTest {
 		BEN.setFirstName("Ben");
 	}
 
-	@Before
-	public void buildManualItem() {
-		ALYSSA.addEvent(TESTING);
-	}
-
 	/**
 	 * Checking that the UserItem persists his events automatically; Checking that
 	 * toString works in the bidirectional relation;
@@ -63,6 +58,7 @@ public class UserEventOwnerTest {
 	@Test
 	public void onUserSaveReadEvent() {
 
+		ALYSSA.addEvent(TESTING);
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
 		assertTrue(em.find(UserItem.class, ALYSSA.getId()) != null);
@@ -85,6 +81,7 @@ public class UserEventOwnerTest {
 	@Test
 	public void onUserAndEventSaveDeleteUser() {
 
+		ALYSSA.addEvent(TESTING);
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
 		assertTrue(eventRepo.existsById(TESTING.getId()));
@@ -101,6 +98,7 @@ public class UserEventOwnerTest {
 	@Test
 	public void onUserSaveChangeEvent() {
 
+		ALYSSA.addEvent(TESTING);
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
 
@@ -129,10 +127,11 @@ public class UserEventOwnerTest {
 	@Test
 	public void twoOwnersSameEvent() {
 
+		ALYSSA.addEvent(TESTING);
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
 
-		ALYSSA.removeEvent(TESTING);
+		ALYSSA.transferEvent(TESTING, BEN);
 		BEN.addEvent(TESTING);
 
 		userRepo.save(ALYSSA);
@@ -150,6 +149,7 @@ public class UserEventOwnerTest {
 	@Test
 	public void saveEventReadItInUserList() {
 
+		ALYSSA.addEvent(TESTING);
 		userRepo.save(ALYSSA);
 		eventRepo.save(TESTING);
 

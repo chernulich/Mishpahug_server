@@ -54,7 +54,7 @@ public class EventItem {
 	private EventStatus Status;
 
 	@ManyToOne 
-	@JoinColumn(nullable = true) // temporary true due to User remove method requiring to remove the owner from Event;
+	@JoinColumn(nullable = false) // temporary true due to User remove method requiring to remove the owner from Event;
 	@JsonBackReference
 	private UserItem userItemOwner;
 

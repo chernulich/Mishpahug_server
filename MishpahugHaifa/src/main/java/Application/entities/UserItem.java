@@ -105,11 +105,9 @@ public class UserItem {
 		return eventItemsOwner.add(event); // TODO: thread safety argument;
 	}
 
-	public boolean removeEvent(EventItem event) {
-		System.out.println("Checking contains " + eventItemsOwner.contains(event));
-		boolean res = eventItemsOwner.remove(event);
-		event.setUserItemOwner(null);
-		return res; 
+	public boolean transferEvent(EventItem event, UserItem newOwner) {
+		event.setUserItemOwner(newOwner);
+		return eventItemsOwner.remove(event);
 	}
 
 	public Set<EventItem> getEventItemsOwner() {
