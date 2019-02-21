@@ -105,6 +105,7 @@ public class UserEventOwnerTest {
 		EventItem savedE = userRepo.findById(ALYSSA.getId()).get().getEventItemsOwner().iterator().next();
 		assertTrue(TESTING.equals(savedE));
 
+		System.out.println("Transfer " + ALYSSA.transferEvent(savedE, BEN));
 		BEN.addEvent(savedE);
 
 		userRepo.save(ALYSSA);

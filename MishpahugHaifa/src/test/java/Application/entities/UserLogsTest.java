@@ -1,11 +1,5 @@
 package Application.entities;
 
-import static org.junit.Assert.assertTrue;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import Application.entities.values.LogsDataValue;
-import Application.entities.values.LogsDataValue.UserActions;
 import Application.repo.UserRepository;
 
 /**
@@ -53,16 +45,16 @@ private static final UserItem ALYSSA = new UserItem();
 	@Test
 	public void addLogsUser() {
 		
-		UserItem createdUser = ALYSSA;
-		createdUser.setLogs(new ArrayList<LogsDataValue>());
-		createdUser.getLogs().add(new LogsDataValue(LocalDate.now(), LocalTime.now(), UserActions.REGISTERED, ""));
-		
-		userRepo.save(createdUser);
-		
-		UserItem persistedUser = userRepo.findById(createdUser.getId()).get();
-
-		assertTrue(persistedUser.equals(createdUser));
-		System.out.println(persistedUser);
-		System.out.println(persistedUser.getLogs());
+//		UserItem createdUser = ALYSSA;
+//		createdUser.setLogs(new ArrayList<LogsDataItem>());
+//		createdUser.getLogs().add(new LogsDataItem(LocalDate.now(), LocalTime.now(), UserActions.REGISTERED, ""));
+//		
+//		userRepo.save(createdUser);
+//		
+//		UserItem persistedUser = userRepo.findById(createdUser.getId()).get();
+//
+//		assertTrue(persistedUser.equals(createdUser));
+//		System.out.println(persistedUser);
+//		System.out.println(persistedUser.getLogs());
 	}
 }

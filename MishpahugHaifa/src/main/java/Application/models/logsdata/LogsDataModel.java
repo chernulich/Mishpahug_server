@@ -1,10 +1,10 @@
 package Application.models.logsdata;
 
-import Application.entities.values.LogsDataValue;
+import Application.entities.LogsDataItem;
 
 public class LogsDataModel implements ILogsDataModel {
     @Override
-    public LogsDataValue add(LogsDataValue data) {
+    public LogsDataItem add(LogsDataItem data) {
         return null;
     }
 

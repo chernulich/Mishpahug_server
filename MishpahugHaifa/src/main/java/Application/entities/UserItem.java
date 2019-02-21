@@ -1,5 +1,6 @@
 package Application.entities;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -22,14 +23,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CollectionId;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import Application.entities.values.LogsDataValue;
 import Application.entities.values.PictureValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -55,12 +51,6 @@ public class UserItem {
 	private String nickname; // TODO: unique nickname;
 	private String firstName;
 	private String lastName;
-	@ElementCollection
-	@CollectionTable
-	@GenericGenerator(name = "increment-gen", strategy = "increment")
-	@CollectionId(columns = {
-			@Column(name = "LOG_RECORD_ID") }, generator = "increment-gen", type = @Type(type = "long"))
-	private List<LogsDataValue> logs;
 	private String phoneNumber;
 	private String eMail;
 	@Enumerated(EnumType.STRING)
@@ -82,7 +72,7 @@ public class UserItem {
 	@Column(unique = true)
 	@JsonManagedReference
 	@Getter(AccessLevel.NONE)
-	private Set<EventItem> eventItemsOwner = new HashSet<>();
+	private List<EventItem> eventItemsOwner = new ArrayList<>();
 
 	@ManyToMany(mappedBy = "userItemsGuestsOfEvents") // User a guest in events
 	@JsonManagedReference
@@ -110,8 +100,8 @@ public class UserItem {
 		return eventItemsOwner.remove(event);
 	}
 
-	public Set<EventItem> getEventItemsOwner() {
-		return Collections.unmodifiableSet(eventItemsOwner);
+	public List<EventItem> getEventItemsOwner() {
+		return Collections.unmodifiableList(eventItemsOwner);
 	}
 
 }
