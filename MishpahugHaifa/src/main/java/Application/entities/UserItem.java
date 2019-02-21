@@ -92,11 +92,15 @@ public class UserItem {
 
 	public boolean addEvent(EventItem event) {
 		event.setUserItemOwner(this);
-		return eventItemsOwner.add(event); // TODO: thread safety argument;
+		if (!eventItemsOwner.contains(event)) {
+			return eventItemsOwner.add(event); // TODO: thread safety argument;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean transferEvent(EventItem event, UserItem newOwner) {
-		event.setUserItemOwner(newOwner);
+		event.setUserItemOwner(newOwner); // TODO: needs null owner because method name confuses; 
 		return eventItemsOwner.remove(event);
 	}
 

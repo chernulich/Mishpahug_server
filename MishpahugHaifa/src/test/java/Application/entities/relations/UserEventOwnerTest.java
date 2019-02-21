@@ -158,5 +158,19 @@ public class UserEventOwnerTest {
 		assertTrue(savedA.getEventItemsOwner().size() == 1);
 
 	}
+	
+
+	@Test
+	public void saveDuplicateEvent() {
+
+		ALYSSA.addEvent(TESTING);
+		ALYSSA.addEvent(TESTING);
+		userRepo.save(ALYSSA);
+		eventRepo.save(TESTING);
+
+		UserItem savedA = userRepo.findById(ALYSSA.getId()).get();
+		assertTrue(savedA.getEventItemsOwner().size() == 1);
+
+	}
 
 }
